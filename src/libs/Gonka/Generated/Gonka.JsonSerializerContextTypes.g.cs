@@ -156,27 +156,35 @@ namespace Gonka
         /// <summary>
         /// 
         /// </summary>
-        public global::Gonka.FunctionCall? Type32 { get; set; }
+        public global::Gonka.ChatCompletionDelta? Type32 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public global::Gonka.ListModelsResponse? Type33 { get; set; }
+        public global::Gonka.FunctionCall? Type33 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public global::System.Collections.Generic.IList<global::Gonka.Model>? Type34 { get; set; }
+        public global::Gonka.ChatCompletionDeltaRole? Type34 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public global::Gonka.Model? Type35 { get; set; }
+        public global::Gonka.ListModelsResponse? Type35 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public global::Gonka.ErrorResponse? Type36 { get; set; }
+        public global::System.Collections.Generic.IList<global::Gonka.Model>? Type36 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public global::Gonka.Error? Type37 { get; set; }
+        public global::Gonka.Model? Type37 { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public global::Gonka.ErrorResponse? Type38 { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public global::Gonka.Error? Type39 { get; set; }
 
         /// <summary>
         /// 

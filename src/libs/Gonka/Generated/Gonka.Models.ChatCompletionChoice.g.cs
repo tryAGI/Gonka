@@ -24,7 +24,7 @@ namespace Gonka
         /// 
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("delta")]
-        public global::Gonka.ChatCompletionMessage? Delta { get; set; }
+        public global::Gonka.ChatCompletionDelta? Delta { get; set; }
 
         /// <summary>
         /// 
@@ -51,7 +51,7 @@ namespace Gonka
         public ChatCompletionChoice(
             int? index,
             global::Gonka.ChatCompletionMessage? message,
-            global::Gonka.ChatCompletionMessage? delta,
+            global::Gonka.ChatCompletionDelta? delta,
             string? finishReason)
         {
             this.Index = index;

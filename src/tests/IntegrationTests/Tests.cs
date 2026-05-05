@@ -1,3 +1,5 @@
+using Meai = Microsoft.Extensions.AI;
+
 namespace Gonka.IntegrationTests;
 
 [TestClass]
@@ -231,6 +233,158 @@ public partial class Tests
         handler.Body.Should().Contain("\"stream\":true");
         handler.Headers.Should().ContainKey("Authorization");
         Convert.FromBase64String(handler.Headers["Authorization"][0]).Should().HaveCount(64);
+    }
+
+    [TestMethod]
+    public async Task CreateChatCompletionStreamingAsync_ReadsRawJsonLinesWithoutDeltaRole()
+    {
+        var handler = new CaptureHandler(
+            """
+            {"id":"chunk-1","model":"test-model","choices":[{"index":0,"delta":{"content":"Hello"}}]}
+            {"id":"chunk-2","model":"test-model","choices":[{"index":0,"delta":{"content":" there"},"finish_reason":"stop"}]}
+            """,
+            "application/x-ndjson");
+        var endpoint = new GonkaEndpoint("https://provider.example.com", TestProviderAddress);
+
+        using var client = new GonkaClient(
+            TestPrivateKey,
+            endpoint,
+            TestRequesterAddress,
+            handler);
+
+        var chunks = new List<CreateChatCompletionResponse>();
+        await foreach (var chunk in client.CreateChatCompletionStreamingAsync(
+            new CreateChatCompletionRequest
+            {
+                Model = "test-model",
+                Messages =
+                [
+                    new ChatCompletionMessage
+                    {
+                        Role = ChatCompletionMessageRole.User,
+                        Content = "Hello",
+                    },
+                ],
+            }))
+        {
+            chunks.Add(chunk);
+        }
+
+        chunks.Should().HaveCount(2);
+        chunks.Select(chunk => chunk.Choices[0].Delta!.Content!.Value.Value1).Should().Equal("Hello", " there");
+        chunks[1].Choices[0].FinishReason.Should().Be("stop");
+    }
+
+    [TestMethod]
+    public async Task CreateChatCompletionStreamingAsync_ThrowsApiExceptionForErrorResponse()
+    {
+        var handler = new CaptureHandler(
+            """
+            {
+              "error": {
+                "message": "invalid request",
+                "type": "invalid_request_error"
+              }
+            }
+            """,
+            statusCode: System.Net.HttpStatusCode.BadRequest);
+        var endpoint = new GonkaEndpoint("https://provider.example.com", TestProviderAddress);
+
+        using var client = new GonkaClient(
+            TestPrivateKey,
+            endpoint,
+            TestRequesterAddress,
+            handler);
+
+        Func<Task> act = async () =>
+        {
+            await foreach (var _ in client.CreateChatCompletionStreamingAsync(
+                new CreateChatCompletionRequest
+                {
+                    Model = "test-model",
+                    Messages =
+                    [
+                        new ChatCompletionMessage
+                        {
+                            Role = ChatCompletionMessageRole.User,
+                            Content = "Hello",
+                        },
+                    ],
+                }))
+            {
+            }
+        };
+
+        var exception = await act.Should().ThrowAsync<ApiException<ErrorResponse>>();
+        exception.Which.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        exception.Which.ResponseBody.Should().Contain("invalid request");
+        exception.Which.ResponseObject?.Error?.Message.Should().Be("invalid request");
+    }
+
+    [TestMethod]
+    public async Task ChatClient_GetResponseAsync_MapsTextRequestAndResponse()
+    {
+        var handler = new CaptureHandler();
+        var endpoint = new GonkaEndpoint("https://provider.example.com", TestProviderAddress);
+
+        using var client = new GonkaClient(
+            TestPrivateKey,
+            endpoint,
+            TestRequesterAddress,
+            handler);
+        Meai.IChatClient chatClient = client;
+
+        var response = await chatClient.GetResponseAsync(
+            [new Meai.ChatMessage(Meai.ChatRole.User, "Hello, Gonka!")],
+            new Meai.ChatOptions
+            {
+                ModelId = "test-model",
+                Temperature = 0.2f,
+                MaxOutputTokens = 32,
+            }).ConfigureAwait(false);
+
+        response.Text.Should().Be("ok");
+        handler.Body.Should().Contain("\"model\":\"test-model\"");
+        handler.Body.Should().Contain("\"temperature\":0.2");
+        handler.Body.Should().Contain("\"max_tokens\":32");
+        handler.Body.Should().Contain("Hello, Gonka!");
+    }
+
+    [TestMethod]
+    public async Task ChatClient_GetStreamingResponseAsync_MapsTextUpdates()
+    {
+        var handler = new CaptureHandler(
+            """
+            data: {"id":"chunk-1","model":"test-model","choices":[{"index":0,"delta":{"role":"assistant","content":"Hello"}}]}
+
+            data: {"id":"chunk-2","model":"test-model","choices":[{"index":0,"delta":{"content":" Gonka"},"finish_reason":"stop"}]}
+
+            data: [DONE]
+
+            """,
+            "text/event-stream");
+        var endpoint = new GonkaEndpoint("https://provider.example.com", TestProviderAddress);
+
+        using var client = new GonkaClient(
+            TestPrivateKey,
+            endpoint,
+            TestRequesterAddress,
+            handler);
+        Meai.IChatClient chatClient = client;
+
+        var text = new System.Text.StringBuilder();
+        var finishReasons = new List<Meai.ChatFinishReason?>();
+        await foreach (var update in chatClient.GetStreamingResponseAsync(
+            [new Meai.ChatMessage(Meai.ChatRole.User, "Hello")],
+            new Meai.ChatOptions { ModelId = "test-model" }))
+        {
+            text.Append(update.Text);
+            finishReasons.Add(update.FinishReason);
+        }
+
+        text.ToString().Should().Be("Hello Gonka");
+        finishReasons.Should().Contain(Meai.ChatFinishReason.Stop);
+        handler.Body.Should().Contain("\"stream\":true");
     }
 
     private sealed class CaptureHandler : HttpMessageHandler

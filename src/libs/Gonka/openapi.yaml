@@ -260,7 +260,7 @@ components:
         delta:
           nullable: true
           allOf:
-            - $ref: '#/components/schemas/ChatCompletionMessage'
+            - $ref: '#/components/schemas/ChatCompletionDelta'
         finish_reason:
           type: string
           nullable: true
@@ -296,6 +296,10 @@ components:
       type: object
       additionalProperties: true
       properties:
+        index:
+          type: integer
+          format: int32
+          nullable: true
         id:
           type: string
           nullable: true
@@ -316,6 +320,30 @@ components:
         arguments:
           type: string
           nullable: true
+    ChatCompletionDelta:
+      type: object
+      additionalProperties: true
+      properties:
+        role:
+          type: string
+          nullable: true
+          enum:
+            - system
+            - user
+            - assistant
+            - tool
+        content:
+          nullable: true
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                $ref: '#/components/schemas/ChatCompletionContentPart'
+        tool_calls:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ChatCompletionMessageToolCall'
     ListModelsResponse:
       type: object
       additionalProperties: true

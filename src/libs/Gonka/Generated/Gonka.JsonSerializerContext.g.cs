@@ -29,9 +29,15 @@ namespace Gonka
 
             typeof(global::Gonka.JsonConverters.ResponseFormatTypeNullableJsonConverter),
 
+            typeof(global::Gonka.JsonConverters.ChatCompletionDeltaRoleJsonConverter),
+
+            typeof(global::Gonka.JsonConverters.ChatCompletionDeltaRoleNullableJsonConverter),
+
             typeof(global::Gonka.JsonConverters.OneOfJsonConverter<string, global::System.Collections.Generic.IList<string>>),
 
             typeof(global::Gonka.JsonConverters.OneOfJsonConverter<string, global::Gonka.ChatCompletionToolChoice>),
+
+            typeof(global::Gonka.JsonConverters.OneOfJsonConverter<string, global::System.Collections.Generic.IList<global::Gonka.ChatCompletionContentPart>>),
 
             typeof(global::Gonka.JsonConverters.OneOfJsonConverter<string, global::System.Collections.Generic.IList<global::Gonka.ChatCompletionContentPart>>),
 
@@ -70,7 +76,9 @@ namespace Gonka
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<global::Gonka.ChatCompletionChoice>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Gonka.ChatCompletionChoice))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Gonka.CompletionUsage))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Gonka.ChatCompletionDelta))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Gonka.FunctionCall))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Gonka.ChatCompletionDeltaRole), TypeInfoPropertyName = "ChatCompletionDeltaRole2")]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Gonka.ListModelsResponse))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::System.Collections.Generic.IList<global::Gonka.Model>))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::Gonka.Model))]

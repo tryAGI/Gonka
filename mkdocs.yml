@@ -12,6 +12,7 @@ nav:
 - Examples:
   - Generate: examples/generate.md
   - Stream Chat: examples/stream-chat.md
+  - Microsoft.Extensions.AI Chat Client: examples/meai-chat-client.md
 # EXAMPLES:END
 
 theme:
