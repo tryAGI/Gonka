@@ -1,0 +1,368 @@
+openapi: 3.0.3
+info:
+  title: Gonka Direct API
+  version: 1.0.0
+  description: |
+    Manual OpenAPI description for direct Gonka Network inference endpoints.
+    Direct requests are OpenAI-compatible and signed with a Gonka ECDSA signature.
+servers:
+  - url: https://gonka.example.com/v1
+    description: Selected Gonka provider endpoint, including /v1.
+paths:
+  /chat/completions:
+    post:
+      operationId: CreateChatCompletion
+      summary: Create a chat completion
+      description: Creates an OpenAI-compatible chat completion against a selected Gonka provider endpoint.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChatCompletionRequest'
+      responses:
+        '200':
+          description: Chat completion response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateChatCompletionResponse'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /models:
+    get:
+      operationId: ListModels
+      summary: List available models
+      description: Returns the models exposed by the selected Gonka provider endpoint.
+      responses:
+        '200':
+          description: Model list response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListModelsResponse'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CreateChatCompletionRequest:
+      type: object
+      additionalProperties: true
+      required:
+        - model
+        - messages
+      properties:
+        model:
+          type: string
+          description: Gonka model identifier, for example Qwen/Qwen3-235B-A22B-Instruct-2507-FP8.
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatCompletionMessage'
+        temperature:
+          type: number
+          format: double
+          nullable: true
+        top_p:
+          type: number
+          format: double
+          nullable: true
+        max_tokens:
+          type: integer
+          format: int32
+          nullable: true
+        stream:
+          type: boolean
+          nullable: true
+        stop:
+          nullable: true
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        tools:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ChatCompletionTool'
+        tool_choice:
+          nullable: true
+          oneOf:
+            - type: string
+            - $ref: '#/components/schemas/ChatCompletionToolChoice'
+        response_format:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ResponseFormat'
+    ChatCompletionMessage:
+      type: object
+      additionalProperties: true
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          enum:
+            - system
+            - user
+            - assistant
+            - tool
+        content:
+          nullable: true
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                $ref: '#/components/schemas/ChatCompletionContentPart'
+        name:
+          type: string
+          nullable: true
+        tool_call_id:
+          type: string
+          nullable: true
+        tool_calls:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/ChatCompletionMessageToolCall'
+    ChatCompletionContentPart:
+      type: object
+      additionalProperties: true
+      required:
+        - type
+      properties:
+        type:
+          type: string
+        text:
+          type: string
+          nullable: true
+        image_url:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ImageUrlContent'
+    ImageUrlContent:
+      type: object
+      additionalProperties: true
+      properties:
+        url:
+          type: string
+        detail:
+          type: string
+          nullable: true
+    ChatCompletionTool:
+      type: object
+      additionalProperties: true
+      required:
+        - type
+        - function
+      properties:
+        type:
+          type: string
+          enum:
+            - function
+        function:
+          $ref: '#/components/schemas/FunctionDefinition'
+    FunctionDefinition:
+      type: object
+      additionalProperties: true
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        parameters:
+          type: object
+          nullable: true
+          additionalProperties: true
+    ChatCompletionToolChoice:
+      type: object
+      additionalProperties: true
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - function
+        function:
+          type: object
+          additionalProperties: true
+          properties:
+            name:
+              type: string
+    ResponseFormat:
+      type: object
+      additionalProperties: true
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - text
+            - json_object
+            - json_schema
+        json_schema:
+          type: object
+          nullable: true
+          additionalProperties: true
+    CreateChatCompletionResponse:
+      type: object
+      additionalProperties: true
+      required:
+        - choices
+      properties:
+        id:
+          type: string
+          nullable: true
+        object:
+          type: string
+          nullable: true
+        created:
+          type: integer
+          format: int64
+          nullable: true
+        model:
+          type: string
+          nullable: true
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatCompletionChoice'
+        usage:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/CompletionUsage'
+    ChatCompletionChoice:
+      type: object
+      additionalProperties: true
+      properties:
+        index:
+          type: integer
+          format: int32
+          nullable: true
+        message:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ChatCompletionMessage'
+        delta:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ChatCompletionMessage'
+        finish_reason:
+          type: string
+          nullable: true
+    CompletionUsage:
+      type: object
+      additionalProperties: true
+      properties:
+        prompt_tokens:
+          type: integer
+          format: int32
+          nullable: true
+        completion_tokens:
+          type: integer
+          format: int32
+          nullable: true
+        total_tokens:
+          type: integer
+          format: int32
+          nullable: true
+        base_cost_usd:
+          type: number
+          format: double
+          nullable: true
+        platform_fee_usd:
+          type: number
+          format: double
+          nullable: true
+        total_cost_usd:
+          type: number
+          format: double
+          nullable: true
+    ChatCompletionMessageToolCall:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        function:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/FunctionCall'
+    FunctionCall:
+      type: object
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+          nullable: true
+        arguments:
+          type: string
+          nullable: true
+    ListModelsResponse:
+      type: object
+      additionalProperties: true
+      required:
+        - data
+      properties:
+        object:
+          type: string
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Model'
+    Model:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+          nullable: true
+        created:
+          type: integer
+          format: int64
+          nullable: true
+        owned_by:
+          type: string
+          nullable: true
+    ErrorResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      additionalProperties: true
+      properties:
+        message:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
