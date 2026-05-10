@@ -66,5 +66,6 @@ namespace Gonka
         public ChatCompletionChoice()
         {
         }
+
     }
 }

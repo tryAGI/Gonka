@@ -49,5 +49,6 @@ namespace Gonka
         public ListModelsResponse()
         {
         }
+
     }
 }

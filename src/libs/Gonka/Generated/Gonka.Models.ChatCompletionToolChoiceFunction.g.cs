@@ -39,5 +39,6 @@ namespace Gonka
         public ChatCompletionToolChoiceFunction()
         {
         }
+
     }
 }
