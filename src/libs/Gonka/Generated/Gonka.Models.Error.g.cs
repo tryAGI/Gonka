@@ -57,5 +57,6 @@ namespace Gonka
         public Error()
         {
         }
+
     }
 }

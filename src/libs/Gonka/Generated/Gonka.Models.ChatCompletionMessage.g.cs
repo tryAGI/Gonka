@@ -78,5 +78,6 @@ namespace Gonka
         public ChatCompletionMessage()
         {
         }
+
     }
 }
