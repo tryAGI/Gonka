@@ -44,6 +44,8 @@ public sealed partial class GonkaClient
                 attempt: 1,
                 maxAttempts: 1,
                 willRetry: false,
+                retryDelay: null,
+                retryReason: string.Empty,
                 cancellationToken: effectiveCancellationToken)).ConfigureAwait(false);
 
         HttpResponseMessage? response = null;
@@ -72,6 +74,8 @@ public sealed partial class GonkaClient
                     attempt: 1,
                     maxAttempts: 1,
                     willRetry: false,
+                    retryDelay: null,
+                    retryReason: string.Empty,
                     cancellationToken: effectiveCancellationToken)).ConfigureAwait(false);
             throw;
         }
@@ -99,6 +103,8 @@ public sealed partial class GonkaClient
                         attempt: 1,
                         maxAttempts: 1,
                         willRetry: false,
+                        retryDelay: null,
+                        retryReason: string.Empty,
                         cancellationToken: effectiveCancellationToken)).ConfigureAwait(false);
 
                 await ThrowStreamingErrorAsync(response, effectiveCancellationToken).ConfigureAwait(false);
@@ -120,6 +126,8 @@ public sealed partial class GonkaClient
                     attempt: 1,
                     maxAttempts: 1,
                     willRetry: false,
+                    retryDelay: null,
+                    retryReason: string.Empty,
                     cancellationToken: effectiveCancellationToken)).ConfigureAwait(false);
 
             await foreach (var chunk in ReadStreamingResponseAsync(response, effectiveCancellationToken).ConfigureAwait(false))
