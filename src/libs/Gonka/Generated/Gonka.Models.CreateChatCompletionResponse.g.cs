@@ -85,5 +85,6 @@ namespace Gonka
         public CreateChatCompletionResponse()
         {
         }
+
     }
 }

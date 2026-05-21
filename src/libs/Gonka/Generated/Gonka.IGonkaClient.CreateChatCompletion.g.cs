@@ -21,6 +21,19 @@ namespace Gonka
         /// Create a chat completion<br/>
         /// Creates an OpenAI-compatible chat completion against a selected Gonka provider endpoint.
         /// </summary>
+        /// <param name="request"></param>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        /// <exception cref="global::Gonka.ApiException"></exception>
+        global::System.Threading.Tasks.Task<global::Gonka.AutoSDKHttpResponse<global::Gonka.CreateChatCompletionResponse>> CreateChatCompletionAsResponseAsync(
+
+            global::Gonka.CreateChatCompletionRequest request,
+            global::Gonka.AutoSDKRequestOptions? requestOptions = default,
+            global::System.Threading.CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Create a chat completion<br/>
+        /// Creates an OpenAI-compatible chat completion against a selected Gonka provider endpoint.
+        /// </summary>
         /// <param name="model">
         /// Gonka model identifier, for example Qwen/Qwen3-235B-A22B-Instruct-2507-FP8.
         /// </param>
