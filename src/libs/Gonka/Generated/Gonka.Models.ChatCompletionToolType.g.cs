@@ -4,12 +4,12 @@
 namespace Gonka
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum ChatCompletionToolType
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Function,
     }

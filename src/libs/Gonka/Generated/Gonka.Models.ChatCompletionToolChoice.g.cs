@@ -4,19 +4,19 @@
 namespace Gonka
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class ChatCompletionToolChoice
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("type")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Gonka.JsonConverters.ChatCompletionToolChoiceTypeJsonConverter))]
         public global::Gonka.ChatCompletionToolChoiceType Type { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("function")]
         public global::Gonka.ChatCompletionToolChoiceFunction? Function { get; set; }

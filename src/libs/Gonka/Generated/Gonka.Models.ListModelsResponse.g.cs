@@ -4,18 +4,18 @@
 namespace Gonka
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class ListModelsResponse
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("object")]
         public string? Object { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("data")]
         [global::System.Text.Json.Serialization.JsonRequired]

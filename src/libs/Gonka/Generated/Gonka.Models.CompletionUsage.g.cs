@@ -4,42 +4,42 @@
 namespace Gonka
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class CompletionUsage
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("prompt_tokens")]
         public int? PromptTokens { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("completion_tokens")]
         public int? CompletionTokens { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("total_tokens")]
         public int? TotalTokens { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("base_cost_usd")]
         public double? BaseCostUsd { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("platform_fee_usd")]
         public double? PlatformFeeUsd { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("total_cost_usd")]
         public double? TotalCostUsd { get; set; }

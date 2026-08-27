@@ -4,12 +4,12 @@
 namespace Gonka
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class ChatCompletionMessage
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("role")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Gonka.JsonConverters.ChatCompletionMessageRoleJsonConverter))]
@@ -17,26 +17,26 @@ namespace Gonka
         public required global::Gonka.ChatCompletionMessageRole Role { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("content")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Gonka.JsonConverters.OneOfJsonConverter<string, global::System.Collections.Generic.IList<global::Gonka.ChatCompletionContentPart>>))]
         public global::Gonka.OneOf<string, global::System.Collections.Generic.IList<global::Gonka.ChatCompletionContentPart>>? Content { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("name")]
         public string? Name { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("tool_call_id")]
         public string? ToolCallId { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("tool_calls")]
         public global::System.Collections.Generic.IList<global::Gonka.ChatCompletionMessageToolCall>? ToolCalls { get; set; }

@@ -20,7 +20,7 @@ namespace Gonka.JsonConverters
                     {
                         return global::Gonka.ChatCompletionToolChoiceTypeExtensions.ToEnum(stringValue) ?? default;
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:

@@ -4,7 +4,7 @@
 namespace Gonka
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class FunctionDefinitionParameters
     {
