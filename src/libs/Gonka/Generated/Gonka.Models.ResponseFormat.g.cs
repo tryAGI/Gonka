@@ -4,12 +4,12 @@
 namespace Gonka
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class ResponseFormat
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("type")]
         [global::System.Text.Json.Serialization.JsonConverter(typeof(global::Gonka.JsonConverters.ResponseFormatTypeJsonConverter))]
@@ -17,7 +17,7 @@ namespace Gonka
         public required global::Gonka.ResponseFormatType Type { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("json_schema")]
         public object? JsonSchema { get; set; }
