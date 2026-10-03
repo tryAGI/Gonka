@@ -51,14 +51,15 @@ portable deterministic-signature compatibility.
 | Another third-party crypto package/native library | Changes the supplier; does not satisfy the no-third-party goal. |
 | Copy/fork a subset of BouncyCastle | Preserves upstream code and obligations; ownership of the repository does not establish review or trust. |
 | Write new secp256k1/RIPEMD-160 code | Requires specialist review of nonce generation, side channels, scalar validation, serialization, known vectors, and negative cases. Do not treat a short implementation as safer by default. |
-| Caller-provided signer plus optional BouncyCastle adapter | Recommended migration direction: a dependency-free HTTP SDK can accept a requester address and signing callback, with private-key convenience APIs isolated in an independently installed adapter. Requires an API migration plan and compatibility tests. |
+| Caller-provided signer plus optional BouncyCastle adapter | Optional future design, not an active migration: a dependency-free HTTP SDK can accept a requester address and signing callback, with private-key convenience APIs isolated in an independently installed adapter. Requires an API migration plan and compatibility tests. |
 
-Retain BouncyCastle for the current private-key API until a validated migration
-is implemented. It remains a documented migration/review item pending maintainer
-review, not a new blanket approval. Do not change signature behavior, remove
-address derivation, or hand-roll private-key arithmetic as part of this review.
+The maintainer approved retaining BouncyCastle for the current private-key API
+on 2026-10-03 after this review. No replacement or signer-adapter migration is
+planned by this decision. This approval is scoped to Gonka's existing use and
+does not authorize adding BouncyCastle to unrelated SDKs or certify a security
+audit. Continue routine version and advisory checks.
 
-Acceptance criteria for migration: exact existing vectors for both signature
+If a migration is requested later, acceptance criteria are: exact existing vectors for both signature
 input modes, low-S and 64-byte output, address derivation, invalid scalars and
 keys, cross-platform/AOT coverage, and a captured-request test proving an
 externally signed request has the same headers and payload bytes. Preserve the
